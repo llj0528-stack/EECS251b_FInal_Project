@@ -1,0 +1,11 @@
+**INFO: Starting Blocking QThread with 8 CPU
+   ____________________________________________________________________
+__/ message from Blocking QThread
+Multi-CPU acceleration using 8 CPU(s).
+*** QThread MetricCollect [begin] (optDesign #5) : mem = 0.6M
+Multithreaded Timing Analysis is initialized with 8 threads
+
+Ending "set_metric_additional_insts" (total cpu=0:00:00.1, real=0:00:00.0, peak res=4256.7M, current mem=3548.7M)
+Ending "set_metric_inst_count_area" (total cpu=0:00:00.1, real=0:00:00.0, peak res=3620.5M, current mem=3556.2M)
+*** QThread MetricCollect [finish] (optDesign #5) : cpu/real = 0:00:00.5/0:00:00.5 (1.0), mem = 0.6M
+_______________________________________________________________________

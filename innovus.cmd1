@@ -1,0 +1,71 @@
+#######################################################
+#                                                     
+#  Innovus Command Logging File                     
+#  Created on Thu Apr 16 20:29:47 2026                
+#                                                     
+#######################################################
+
+#@(#)CDS: Innovus v23.15-s106_1 (64bit) 07/16/2025 17:15 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: NanoRoute 23.15-s106_1 NR250707-2219/23_15-UB (database version 18.20.674) {superthreading v2.20}
+#@(#)CDS: AAE 23.15-s032 (64bit) 07/16/2025 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: CTE 23.15-s037_1 () Jul 16 2025 02:46:10 ( )
+#@(#)CDS: SYNTECH 23.15-s011_1 () Jun 23 2025 00:02:58 ( )
+#@(#)CDS: CPE v23.15-s089
+#@(#)CDS: IQuantus/TQuantus 23.1.1-s476 (64bit) Wed Jul 2 23:22:08 PDT 2025 (Linux 3.10.0-693.el7.x86_64)
+
+set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+suppressMessage ENCEXT-2799
+getVersion
+win
+restoreDesign ./build/innovus/db/FFE_final.enc.dat FFE
+zoomBox -145.24000 -52.58300 1115.29700 1017.16100
+zoomBox 2.25700 83.90700 2307.34500 994.57600
+zoomBox 122.84800 194.93300 2082.17300 969.00200
+zoomBox 2.25600 83.90600 2307.34600 994.57600
+zoomBox 122.84700 194.93200 2082.17400 969.00200
+zoomBox 229.06000 290.71900 1894.48800 948.67800
+zoomBox 319.34200 372.13800 1734.95500 931.40300
+zoomBox 396.08100 441.34400 1599.35200 916.71900
+zoomBox 319.34200 372.13800 1734.95500 931.40300
+zoomBox 229.06000 290.71900 1894.48700 948.67800
+zoomBox 319.34200 372.13800 1734.95500 931.40300
+zoomBox 396.08100 441.34400 1599.35200 916.71900
+zoomBox 461.30900 500.16900 1484.09000 904.23800
+zoomBox 516.75300 550.17000 1386.11700 893.62900
+zoomBox 563.88100 592.67100 1302.84000 884.61100
+zoomBox 603.93900 628.79700 1232.05500 876.94600
+zoomBox 637.98800 659.50400 1171.88700 870.43100
+zoomBox 666.93000 685.60500 1120.74400 864.89300
+zoomBox 691.53000 707.79100 1077.27300 860.18600
+zoomBox 666.92900 685.60500 1120.74400 864.89300
+zoomBox 691.20200 707.01300 1076.94500 859.40800
+zoomBox 711.83400 725.21000 1039.71600 854.74600
+zoomBox 729.37100 740.67700 1008.07200 850.78300
+zoomBox 729.37100 740.67600 1008.07200 850.78200
+zoomBox 711.83300 725.20700 1039.71700 854.74400
+zoomIn
+panPage -1 0
+panPage 0 1
+panPage 0 1
+panPage 0 1
+panPage 0 -1
+zoomIn
+panPage -1 0
+panPage 0 1
+panPage 0 1
+zoomIn
+zoomIn
+zoomOut
+panPage -1 0
+panPage 0 -1
+panPage 0 1
+panPage 0 1
+panPage 0 1
+panPage 0 -1
+zoomIn
+panPage 1 0
+panPage 0 1
+panPage 0 -1
+panPage 0 1
+zoomBox 827.33900 825.52900 832.10100 827.41000
+zoomBox 827.03000 825.39900 832.63300 827.61300

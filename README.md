@@ -52,7 +52,14 @@ source env.sh
 make sim
 ```
 
-in the ```scratch/eecs251b-aaj/Final_Project``` directory. 
+in the ```scratch/eecs251b-aaj/Final_Project``` directory, Which will generate ```/scratch/eecs251b-aaj/Final_Project/build/simulation/ffe.vpd``` waveform file. If you want to view the waveform by using DVE(Synopsys), run
+
+```bash
+make sim_gui
+```
+
+and add signals to waveform viewer. 
+
 
 # 4. Run PAR
 Run 
@@ -73,3 +80,25 @@ Then in the innovus terminal, run
 ```innovus
 restoreDesign ./build/innovus/db/FFE_final.enc.dat FFE
 ```
+
+# Run DRC
+Run
+```bash
+make drc
+```
+If you want to open the result in Pegasus GUI, run
+```bash
+make drc_gui
+```
+and click Pegasus -> Open Run -> Select file "xxx.drc_errors.ascii" to open the DRC result.
+
+# Run LVS
+Run
+```bash
+make lvs_netlist
+```
+to generate a catenated verilog file ```build/genus/netlist/FFE_top.cdl``` and used in Pegasus LVS. Then run
+```bash
+make lvs
+```
+and view the result in

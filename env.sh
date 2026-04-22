@@ -19,6 +19,12 @@ export PATH=$INNOVUS_HOME/bin:$PATH
 export SPECTRE_HOME=$CADENCE_HOME/SPECTRE231
 export PATH=$SPECTRE_HOME/bin:$PATH
 
+# Xcelium
+export XCELIUM_HOME=/share/instsww/cadence/XCELIUM.25.09.002
+export CDS_XCELIUM_HOME=/share/instsww/cadence/XCELIUM.25.09.002
+export CDS_NC_ROOT=/share/instsww/cadence/XCELIUM.25.09.002
+export PATH=/share/instsww/cadence/XCELIUM.25.09.002/tools/bin:$PATH
+
 # Print confirmation
 echo "--------------------------------------"
 echo "Cadence environment loaded"

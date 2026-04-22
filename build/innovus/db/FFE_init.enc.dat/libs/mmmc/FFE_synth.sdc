@@ -1,1 +1,0 @@
-/scratch/eecs251b-aaj/Final_Project/build/genus/netlist/FFE_synth.sdc

@@ -32,6 +32,44 @@ TB_FILE  := $(ROOT)/tb/ffe/tb_ffe.v
 RTL_FILE := $(ROOT)/rtl/ffe/FFE.v
 
 # ------------------------------------------------------------
+# Pegasus DRC
+# ------------------------------------------------------------
+PEGASUS_DIR        := $(ROOT)/build/pegasus
+PEGASUS_DRC_DIR    := $(PEGASUS_DIR)/drc
+PEGASUS_LOG_DIR    := $(PEGASUS_DRC_DIR)/logs
+
+GDS_FILE           := $(ROOT)/build/innovus/outputs/FFE_nomerged.gds ## choose merged or nomerged!!!
+TOP_CELL           := FFE
+DRC_RULE           := $(ROOT)/tech/drc/sky130_rev_0.0_1.0.drc.pvl
+
+PEGASUS_CMD        := pegasus
+PEGASUS_REVIEW_CMD := pegasusDesignReview
+
+PEGASUS_REVIEW_CMD := pegasusDesignReview
+
+# ------------------------------------------------------------
+# Pegasus LVS
+# ------------------------------------------------------------
+LVS_DIR           := $(ROOT)/build/pegasus/lvs
+LVS_LOG_DIR       := $(LVS_DIR)/logs
+LVS_RULE          := $(ROOT)/tech/lvs/sky130.lvs.pvl
+LVS_MERGED_VERILOG := $(LVS_DIR)/FFE_lvs_merged.v
+
+# Scheme A: direct Verilog LVS
+LVS_VERILOG := $(ROOT)/build/innovus/outputs/FFE_par.v
+# LVS_VERILOG       := $(ROOT)/build/genus/netlist/FFE_synth.v
+STDCELL_VERILOG   := $(ROOT)/tech/lvs/sky130_scl_9T.v
+LVS_GDS_FILE      := $(ROOT)/build/innovus/outputs/FFE_merged.gds
+
+# Scheme B: CDL fallback
+# CDL_LIB           := $(ROOT)/tech/sky130_scl_9T.cdl
+CDL_LIB := /home/ff/eecs251b/sky130/sky130A/libs.ref/sky130_fd_sc_hd/cdl/sky130_fd_sc_hd.cdl
+CDL_GEN_SCRIPT    := $(ROOT)/scripts/utils/gen_ffe_cdl.py
+TOP_CDL_FILE      := $(ROOT)/build/genus/netlist/FFE_top.cdl
+
+
+
+# ------------------------------------------------------------
 # Default target
 # ------------------------------------------------------------
 .PHONY: all
@@ -58,8 +96,8 @@ genus:
 # ------------------------------------------------------------
 # Genus GUI (debug)
 # ------------------------------------------------------------
-.PHONY: genus_debug
-genus_debug:
+.PHONY: genus_gui
+genus_gui:
 	@echo "===== Launching Genus GUI ====="
 	cd $(GENUS_DIR) && \
 	genus -gui
@@ -78,8 +116,8 @@ innovus:
 # ------------------------------------------------------------
 # Innovus GUI (debug)
 # ------------------------------------------------------------
-.PHONY: par_debug
-par_debug:
+.PHONY: innovus_gui
+innovus_gui:
 	@echo "===== Launching Innovus GUI ====="
 	cd $(INNOVUS_DIR) && \
 	innovus -files $(PAR_SCRIPT) -gui
@@ -107,7 +145,7 @@ sim:
 sim_gui:
 	@echo "===== Opening DVE ====="
 	cd $(SIM_DIR) && \
-	dve -full64 -vpd vcdplus.vpd &
+	dve -full64 -vpd ffe.vpd &
 
 # ------------------------------------------------------------
 # Clean simulation only
@@ -134,4 +172,123 @@ clean_all:
 	@echo "===== Cleaning build ====="
 	rm -rf $(GENUS_BUILD_DIR)
 	rm -rf $(PAR_BUILD_DIR)
+	rm -rf $(PEGASUS_DIR)
 	@echo "===== Clean Done ====="
+
+# ------------------------------------------------------------
+# Pegasus DRC
+# ------------------------------------------------------------
+.PHONY: drc
+drc:
+	@echo "===== Running Pegasus DRC ====="
+	mkdir -p $(PEGASUS_DRC_DIR)
+	mkdir -p $(PEGASUS_LOG_DIR)
+	test -f $(GDS_FILE) || (echo "ERROR: GDS file not found: $(GDS_FILE)" && exit 1)
+	test -f $(DRC_RULE) || (echo "ERROR: DRC rule file not found: $(DRC_RULE)" && exit 1)
+	cd $(PEGASUS_DRC_DIR) && \
+	$(PEGASUS_CMD) -drc -dp 8 -license_dp_continue \
+	-gds $(GDS_FILE) \
+	-top_cell $(TOP_CELL) \
+	-ui_data \
+	$(DRC_RULE) \
+	| tee $(PEGASUS_LOG_DIR)/pegasus_drc.log
+	@echo "===== DRC Done ====="
+
+# ------------------------------------------------------------
+# Pegasus DRC Review GUI
+# ------------------------------------------------------------
+.PHONY: drc_gui
+drc_gui:
+	@echo "===== Opening Pegasus DRC Review ====="
+	test -f $(GDS_FILE) || (echo "ERROR: GDS file not found: $(GDS_FILE)" && exit 1)
+	cd $(PEGASUS_DRC_DIR) && \
+	$(PEGASUS_REVIEW_CMD) -qrv -data $(GDS_FILE) &
+
+# ------------------------------------------------------------
+# Clean Pegasus DRC, LVS, Pegasus
+# ------------------------------------------------------------
+.PHONY: clean_drc clean
+clean_drc:
+	@echo "===== Cleaning Pegasus DRC ====="
+	rm -rf $(PEGASUS_DRC_DIR)
+	@echo "===== Pegasus DRC Clean Done ====="
+
+.PHONY: clean_lvs clean
+clean_lvs:
+	@echo "===== Cleaning Pegasus LVS ====="
+	rm -rf $(LVS_DIR)
+	@echo "===== Pegasus LVS Clean Done ====="
+
+.PHONY: clean_pegasus clean
+clean_pegasus:
+	@echo "===== Cleaning Pegasus ====="
+	rm -rf $(PEGASUS_DIR)
+	@echo "===== Pegasus Clean Done ====="
+
+# ------------------------------------------------------------
+# Pegasus LVS - Scheme A
+# Direct gate-level Verilog source
+# ------------------------------------------------------------
+.PHONY: lvs
+lvs:
+	@echo "===== Running Pegasus LVS (Verilog source) ====="
+	test -f $(LVS_VERILOG) || (echo "ERROR: source Verilog not found: $(LVS_VERILOG)" && exit 1)
+	test -f $(STDCELL_VERILOG) || (echo "ERROR: stdcell Verilog not found: $(STDCELL_VERILOG)" && exit 1)
+	test -f $(LVS_GDS_FILE) || (echo "ERROR: GDS file not found: $(LVS_GDS_FILE)" && exit 1)
+	test -f $(LVS_RULE) || (echo "ERROR: LVS rule file not found: $(LVS_RULE)" && exit 1)
+	mkdir -p $(LVS_DIR)
+	mkdir -p $(LVS_LOG_DIR)
+	cat $(STDCELL_VERILOG) $(LVS_VERILOG) > $(LVS_MERGED_VERILOG)
+	cd $(LVS_DIR) && \
+	$(PEGASUS_CMD) -lvs -dp 8 \
+	-automatch \
+	-check_schematic \
+	-ui_data \
+	-source_verilog $(LVS_MERGED_VERILOG) \
+	-gds $(LVS_GDS_FILE) \
+	-source_top_cell $(TOP_CELL) \
+	-layout_top_cell $(TOP_CELL) \
+	$(LVS_RULE) \
+	| tee $(LVS_LOG_DIR)/lvs.log
+
+# ------------------------------------------------------------
+# Pegasus LVS - Scheme B
+# Generate top-level CDL for LVS
+# ------------------------------------------------------------
+.PHONY: lvs_cdl_netlist
+lvs_cdl_netlist:
+	@echo "===== Generating top-level CDL for LVS ====="
+	test -f $(CDL_GEN_SCRIPT) || (echo "ERROR: CDL generator script not found: $(CDL_GEN_SCRIPT)" && exit 1)
+	test -f $(LVS_VERILOG) || (echo "ERROR: synth Verilog not found: $(LVS_VERILOG)" && exit 1)
+	test -f $(CDL_LIB) || (echo "ERROR: CDL library not found: $(CDL_LIB)" && exit 1)
+	mkdir -p $(ROOT)/build/genus/netlist
+	python3 $(CDL_GEN_SCRIPT) \
+		--verilog $(LVS_VERILOG) \
+		--cdl-lib $(CDL_LIB) \
+		--out $(TOP_CDL_FILE) \
+		--top $(TOP_CELL)
+	@echo "===== CDL netlist generated: $(TOP_CDL_FILE) ====="
+
+# ------------------------------------------------------------
+# LVS using generated CDL + merged GDS
+# ------------------------------------------------------------
+.PHONY: lvs_cdl
+lvs_cdl: lvs_cdl_netlist
+	@echo "===== Running CDL-based LVS ====="
+	test -f $(TOP_CDL_FILE) || (echo "ERROR: top CDL file not found: $(TOP_CDL_FILE)" && exit 1)
+	test -f $(LVS_GDS_FILE) || (echo "ERROR: GDS file not found: $(LVS_GDS_FILE)" && exit 1)
+	test -f $(LVS_RULE) || (echo "ERROR: LVS rule file not found: $(LVS_RULE)" && exit 1)
+	mkdir -p $(LVS_DIR)
+	mkdir -p $(LVS_LOG_DIR)
+	cd $(LVS_DIR) && \
+	$(PEGASUS_CMD) -lvs -dp 8 \
+	-automatch \
+	-check_schematic \
+	-ui_data \
+	-source_cdl $(TOP_CDL_FILE) \
+	-gds $(LVS_GDS_FILE) \
+	-source_top_cell $(TOP_CELL) \
+	-layout_top_cell $(TOP_CELL) \
+	$(LVS_RULE) \
+	| tee $(LVS_LOG_DIR)/lvs_cdl.log
+	@echo "===== CDL-based LVS Done ====="

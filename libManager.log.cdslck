@@ -1,0 +1,16 @@
+#
+# Edit Lock-Stake file. CAUTION: Please do not change.
+#
+# Information about current Edit Lock Owner.
+#
+LockStakeVersion               1.1
+LoginName                      eecs251b-aaj
+HostName                       eda-4.EECS.Berkeley.EDU
+ProcessIdentifier              2912503
+ProcessCreationTime_UTC        1776833277
+ProcessCreationTime_Readable   Tue Apr 21 21:47:57 2026 PDT
+AppIdentifier                  /share/instsww/cadence/IC618/tools/dfII/bin/64bit/libManager
+OSType                         lnx86
+ReasonForPlacingEditLock       log file
+FilePathUsedToEditLock         /scratch/eecs251b-aaj/Final_Project/libManager.log
+TimeEditLocked                 Tue Apr 21 21:49:05 2026 PDT

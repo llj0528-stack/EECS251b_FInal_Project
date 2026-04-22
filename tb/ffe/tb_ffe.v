@@ -61,6 +61,16 @@ module tb_ffe;
         .dout3      (dout3),
         .dout_valid (dout_valid)
     );
+    
+    // =========================================================
+    // VPD dump
+    // =========================================================
+    initial
+    begin
+        $vcdplusfile("ffe.vpd");
+        $vcdpluson(0, tb_ffe);
+    end
+
 
     // =========================================================
     // Clock generation
@@ -96,8 +106,9 @@ module tb_ffe;
     reg signed [ACC_W-1:0] golden2_d2;
     reg signed [ACC_W-1:0] golden3_d2;
 
-    reg                    golden_valid_d1;
-    reg                    golden_valid_d2;
+    reg golden_valid_d1;
+    reg golden_valid_d2;
+    reg golden_valid_d3;
 
     integer i;
     integer error_cnt;
@@ -231,11 +242,13 @@ module tb_ffe;
             golden3_d2     <= {ACC_W{1'b0}};
             golden_valid_d1 <= 1'b0;
             golden_valid_d2 <= 1'b0;
+            golden_valid_d3 <= 1'b0;
         end
         else if (en)
         begin
             golden_valid_d1 <= din_valid;
             golden_valid_d2 <= golden_valid_d1;
+            golden_valid_d3 <= golden_valid_d2;
 
             if (din_valid)
             begin
@@ -271,11 +284,11 @@ module tb_ffe;
     // =========================================================
     // Output checker
     // =========================================================
-    always @(posedge clk)
+    always @(negedge clk)
     begin
         if (rst_n && en && dout_valid)
         begin
-            if (!golden_valid_d2)
+            if (!golden_valid_d3)
             begin
                 $display("[%0t] ERROR: dout_valid asserted but golden_valid_d2 is 0", $time);
                 error_cnt = error_cnt + 1;

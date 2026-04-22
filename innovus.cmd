@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Apr 16 20:20:02 2026                
+#  Created on Tue Apr 21 20:07:01 2026                
 #                                                     
 #######################################################
 
@@ -173,15 +173,15 @@ set_global timing_enable_path_group_priority false
 set_global timing_constraint_enable_group_path_resetting false
 getOptMode -allowPreCTSClkSrcPaths -quiet
 set_global _is_ipo_interactive_path_groups 1
-group_path -name in2reg_tmp.3323564 -from {0x18e 0x191} -to 0x192 -ignore_source_of_trigger_arc
+group_path -name in2reg_tmp.2512442 -from {0x18e 0x191} -to 0x192 -ignore_source_of_trigger_arc
 getOptMode -allowPreCTSClkSrcPaths -quiet
 set_global _is_ipo_interactive_path_groups 1
-group_path -name in2out_tmp.3323564 -from {0x19d 0x1a0} -to 0x1a1 -ignore_source_of_trigger_arc
+group_path -name in2out_tmp.2512442 -from {0x19d 0x1a0} -to 0x1a1 -ignore_source_of_trigger_arc
 set_global _is_ipo_interactive_path_groups 1
-group_path -name reg2reg_tmp.3323564 -from 0x1ab -to 0x1b4
+group_path -name reg2reg_tmp.2512442 -from 0x1ab -to 0x1b4
 set_global _is_ipo_interactive_path_groups 1
-group_path -name reg2out_tmp.3323564 -from 0x1c7 -to 0x1d0
-setPathGroupOptions reg2reg_tmp.3323564 -effortLevel high
+group_path -name reg2out_tmp.2512442 -from 0x1c7 -to 0x1d0
+setPathGroupOptions reg2reg_tmp.2512442 -effortLevel high
 isAnalysisModeSetup
 getAnalysisMode -analysisType -quiet
 isAnalysisModeSetup
@@ -199,9 +199,9 @@ get_delay_corner $dcCorner -library_set
 get_library_set $libSetName -si
 get_delay_corner $dcCorner -late_library_set
 get_delay_corner $dcCorner -early_library_set
-reset_path_group -name reg2out_tmp.3323564
+reset_path_group -name reg2out_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
-reset_path_group -name in2out_tmp.3323564
+reset_path_group -name in2out_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
 setDelayCalMode -ignoreNetLoad false
 set delaycal_use_default_delay_limit 1000
@@ -409,9 +409,9 @@ scanReorder
 setDelayCalMode -engine aae
 all_setup_analysis_views
 getPlaceMode -exp_slack_driven -quiet
-reset_path_group -name reg2reg_tmp.3323564
+reset_path_group -name reg2reg_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
-reset_path_group -name in2reg_tmp.3323564
+reset_path_group -name in2reg_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
 set_global timing_enable_path_group_priority $gpsPrivate::optSave_ctePGPriority
 set_global timing_constraint_enable_group_path_resetting $gpsPrivate::optSave_ctePGResetting
@@ -451,18 +451,18 @@ set_global timing_enable_path_group_priority false
 set_global timing_constraint_enable_group_path_resetting false
 getOptMode -allowPreCTSClkSrcPaths -quiet
 set_global _is_ipo_interactive_path_groups 1
-group_path -name in2reg_tmp.3323564 -from {0x1e4 0x1e7} -to 0x1e8 -ignore_source_of_trigger_arc
+group_path -name in2reg_tmp.2512442 -from {0x1e4 0x1e7} -to 0x1e8 -ignore_source_of_trigger_arc
 getOptMode -allowPreCTSClkSrcPaths -quiet
 set_global _is_ipo_interactive_path_groups 1
-group_path -name in2out_tmp.3323564 -from {0x1f3 0x1f6} -to 0x1f7 -ignore_source_of_trigger_arc
+group_path -name in2out_tmp.2512442 -from {0x1f3 0x1f6} -to 0x1f7 -ignore_source_of_trigger_arc
 set_global _is_ipo_interactive_path_groups 1
-group_path -name reg2reg_tmp.3323564 -from 0x201 -to 0x20a
+group_path -name reg2reg_tmp.2512442 -from 0x201 -to 0x20a
 set_global _is_ipo_interactive_path_groups 1
-group_path -name reg2out_tmp.3323564 -from 0x21d -to 0x226
-setPathGroupOptions reg2reg_tmp.3323564 -effortLevel high
-reset_path_group -name reg2out_tmp.3323564
+group_path -name reg2out_tmp.2512442 -from 0x21d -to 0x226
+setPathGroupOptions reg2reg_tmp.2512442 -effortLevel high
+reset_path_group -name reg2out_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
-reset_path_group -name in2out_tmp.3323564
+reset_path_group -name in2out_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
 setDelayCalMode -ignoreNetLoad false
 set delaycal_use_default_delay_limit 1000
@@ -503,9 +503,9 @@ getPlaceMode -congRepairCleanupPadding -quiet
 getPlaceMode -quiet -wireLenOptEffort
 all_setup_analysis_views
 getPlaceMode -exp_slack_driven -quiet
-reset_path_group -name reg2reg_tmp.3323564
+reset_path_group -name reg2reg_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
-reset_path_group -name in2reg_tmp.3323564
+reset_path_group -name in2reg_tmp.2512442
 set_global _is_ipo_interactive_path_groups 0
 set_global timing_enable_path_group_priority $gpsPrivate::optSave_ctePGPriority
 set_global timing_constraint_enable_group_path_resetting $gpsPrivate::optSave_ctePGResetting
@@ -585,9 +585,16 @@ optDesign -postRoute -setup
 optDesign -postRoute -hold
 saveDesign ./build/innovus/db/FFE_postroute_opt.enc
 verify_drc > ./build/innovus/reports/FFE_drc.rpt
-report_timing > ./build/innovus/reports/${TOP}_final_timing.rpt
+report_timing -max_paths 50 > ./build/innovus/reports/${TOP}_final_timing.rpt
 report_area > ./build/innovus/reports/FFE_final_area.rpt
 report_power > ./build/innovus/reports/FFE_final_power.rpt
 saveNetlist ./build/innovus/outputs/FFE_par.v
 write_sdf ./build/innovus/outputs/${TOP}.par.sdf
 saveDesign ./build/innovus/db/FFE_final.enc
+streamOut ./build/innovus/outputs/FFE_merged.gds -mapFile /scratch/eecs251b-aaj/Final_Project/tech/sky130_stream.mapFile -structureName FFE -merge { /scratch/eecs251b-aaj/Final_Project/tech/sky130_scl_9T.gds } -uniquifyCellNames -mode ALL
+streamOut ./build/innovus/outputs/FFE_nomerged.gds -mapFile /scratch/eecs251b-aaj/Final_Project/tech/sky130_stream.mapFile -structureName FFE -uniquifyCellNames -mode ALL
+win
+zoomBox -28.25600 19.85900 477.35900 448.94500
+zoomBox -169.63600 -146.18000 653.67300 552.51400
+zoomBox -310.36000 -311.44900 829.16800 655.60200
+streamOut ./build/innovus/outputs/FFE_nomerged.gds -mapFile /scratch/eecs251b-aaj/Final_Project/tech/sky130_stream.mapFile -structureName FFE -mode ALL

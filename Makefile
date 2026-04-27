@@ -32,6 +32,13 @@ TB_FILE  := $(ROOT)/tb/ffe/tb_ffe.v
 RTL_FILE := $(ROOT)/rtl/ffe/FFE.v
 
 # ------------------------------------------------------------
+# Golden model simulation
+# ------------------------------------------------------------
+GOLDEN_SIM_DIR := $(ROOT)/build/golden_model_simulation
+GOLDEN_TB_FILE := $(ROOT)/tb/golden_model/ffe_golden_model_tb.v
+GOLDEN_PY_SCRIPT := $(ROOT)/reference_model/ffe/run_ffe_check.py
+
+# ------------------------------------------------------------
 # Pegasus DRC
 # ------------------------------------------------------------
 PEGASUS_DIR        := $(ROOT)/build/pegasus
@@ -146,6 +153,28 @@ sim_gui:
 	@echo "===== Opening DVE ====="
 	cd $(SIM_DIR) && \
 	dve -full64 -vpd ffe.vpd &
+
+# ------------------------------------------------------------
+# Golden Model Simulation (RTL + Python)
+# ------------------------------------------------------------
+.PHONY: golden_model_sim
+golden_model_sim:
+	@echo "===== Running Golden Model Simulation ====="
+	mkdir -p $(GOLDEN_SIM_DIR)
+
+	cd $(GOLDEN_SIM_DIR) && \
+	source $(ROOT)/env.sh && \
+	vcs -full64 -sverilog -debug_access+all \
+	$(GOLDEN_TB_FILE) \
+	$(RTL_FILE) \
+	-o simv_golden && \
+	./simv_golden
+
+	@echo "===== Running Python Golden Model Checker ====="
+	cd $(ROOT) && \
+	python3 $(GOLDEN_PY_SCRIPT) $(GOLDEN_SIM_DIR)
+
+	@echo "===== Golden Model Simulation Done ====="
 
 # ------------------------------------------------------------
 # Clean simulation only

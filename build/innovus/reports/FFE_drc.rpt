@@ -1,0 +1,53 @@
+#-check_same_via_cell true               # bool, default=false, user setting
+ *** Starting Verify DRC (MEM: 11851.1) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Sub-Area: {0.000 663.040 165.760 818.340} 21 of 25  Thread : 1
+ VERIFY DRC ...... Sub-Area: {0.000 0.000 165.760 165.760} 1 of 25  Thread : 7
+ VERIFY DRC ...... Sub-Area: {663.040 663.040 826.160 818.340} 25 of 25  Thread : 1
+ VERIFY DRC ...... Sub-Area: {663.040 0.000 826.160 165.760} 5 of 25  Thread : 4
+ VERIFY DRC ...... Sub-Area: {331.520 663.040 497.280 818.340} 23 of 25  Thread : 6
+ VERIFY DRC ...... Sub-Area: {663.040 331.520 826.160 497.280} 15 of 25  Thread : 2
+ VERIFY DRC ...... Sub-Area: {331.520 0.000 497.280 165.760} 3 of 25  Thread : 3
+ VERIFY DRC ...... Sub-Area: {331.520 331.520 497.280 497.280} 13 of 25  Thread : 5
+ VERIFY DRC ...... Sub-Area: {0.000 331.520 165.760 497.280} 11 of 25  Thread : 0
+ VERIFY DRC ...... Sub-Area: {165.760 663.040 331.520 818.340} 22 of 25  Thread : 6
+ VERIFY DRC ...... Sub-Area: {497.280 663.040 663.040 818.340} 24 of 25  Thread : 4
+ VERIFY DRC ...... Sub-Area: {663.040 165.760 826.160 331.520} 10 of 25  Thread : 2
+ VERIFY DRC ...... Sub-Area: {165.760 0.000 331.520 165.760} 2 of 25  Thread : 3
+ VERIFY DRC ...... Sub-Area: {165.760 331.520 331.520 497.280} 12 of 25  Thread : 0
+ VERIFY DRC ...... Sub-Area: {497.280 497.280 663.040 663.040} 19 of 25  Thread : 4
+ VERIFY DRC ...... Sub-Area: {497.280 0.000 663.040 165.760} 4 of 25  Thread : 2
+ VERIFY DRC ...... Sub-Area: {0.000 165.760 165.760 331.520} 6 of 25  Thread : 0
+ VERIFY DRC ...... Sub-Area: {0.000 497.280 165.760 663.040} 16 of 25  Thread : 3
+ VERIFY DRC ...... Sub-Area: {497.280 331.520 663.040 497.280} 14 of 25  Thread : 4
+ VERIFY DRC ...... Sub-Area: {165.760 165.760 331.520 331.520} 7 of 25  Thread : 0
+ VERIFY DRC ...... Sub-Area: {165.760 497.280 331.520 663.040} 17 of 25  Thread : 3
+ VERIFY DRC ...... Sub-Area: {497.280 165.760 663.040 331.520} 9 of 25  Thread : 4
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Sub-Area: {663.040 497.280 826.160 663.040} 20 of 25  Thread : 1
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY DRC ...... Sub-Area: {331.520 497.280 497.280 663.040} 18 of 25  Thread : 3
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Sub-Area: {331.520 165.760 497.280 331.520} 8 of 25  Thread : 4
+ VERIFY DRC ...... Thread : 4 finished.
+
+  Verification Complete : 8 Viols.
+
+ Violation Summary By Layer and Type:
+
+	          outOD   Totals
+	met2          4        4
+	met3          4        4
+	Totals        8        8
+
+ *** End Verify DRC (CPU TIME: 0:00:01.3  ELAPSED TIME: 0:00:01.0  MEM: 0.0M) ***
+

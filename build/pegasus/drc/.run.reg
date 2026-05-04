@@ -1,0 +1,17 @@
+# This Pegasus GUI File Index Registry was created automatically
+# Do not attempt to modify this file as any change may lead
+# to Pegasus GUI Tools malfunction.
+# 
+"Layout GDSII" input none /scratch/eecs251b-aaj/Final_Project/build/innovus/outputs/FFE_nomerged.gds
+"Pegasus Job Mode" internal none drc
+"Rule File" input text /scratch/eecs251b-aaj/Final_Project/tech/drc/sky130_rev_0.0_1.0.drc.pvl
+"DRC Summary" output text /scratch/eecs251b-aaj/Final_Project/build/pegasus/drc/sky130_fd_sc_ls__bufinv_16.sum
+"ASCII DRC Report Database" output rdb /scratch/eecs251b-aaj/Final_Project/build/pegasus/drc/./sky130_fd_sc_ls__bufinv_16.drc_errors.ascii
+"Run Directory" internal none /scratch/eecs251b-aaj/Final_Project/build/pegasus/drc/
+"UI Data" internal none ENABLED
+"Pegasus Mode Info" internal none GGJBJHABAPFKDHPLPDKLGOAGEPMEHGBJ
+"Report MaxResults" internal none 1000
+"Pegasus Version" internal none 22.14-s007
+"Binary Name" internal none Pegasus
+"Pegasus Build Date" internal none "Tue Jan 31 16:35:56 PST 2023"
+"Pegasus Job Time" internal none 1776828142

@@ -7,7 +7,7 @@
 *.cmd
 
 # Reports
-*.rpt
+# *.rpt
 *.out
 *.jou
 *.gz
@@ -16,8 +16,10 @@
 
 
 # Build
-build/
-timingReports/
+# build/
+# timingReports/
+db/
+logs/
 fv/
 docs/
 innovus_temp_3394531_03f1af53-a580-4a14-a973-9faeae7faae0_eda-4.EECS.Berkeley.EDU_eecs251b-aaj_C9fdQd/

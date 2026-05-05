@@ -93,12 +93,40 @@ make drc_gui
 and click Pegasus -> Open Run -> Select file "xxx.drc_errors.ascii" to open the DRC result.
 
 # Run LVS
-Run
+Run LVS after Genus and Innovus have completed.
+
+To generate the top-level CDL netlist used by Pegasus LVS, run:
+
 ```bash
-make lvs_netlist
+make lvs_cdl_netlist
 ```
-to generate a catenated verilog file ```build/genus/netlist/FFE_top.cdl``` and used in Pegasus LVS. Then run
+
+This generates:
+
+```text
+build/genus/netlist/FFE_top.cdl
+```
+
+The CDL generator reads the Innovus post-PAR Verilog netlist, preserves bracketed bus names, expands the top-level FFE ports, and emits standard-cell instances.
+
+LVS uses the non-merged Innovus GDS together with a LEF-derived abstract standard-cell GDS. If the abstract GDS needs to be regenerated, run:
+
 ```bash
-make lvs
+python3 scripts/utils/lef_to_stdcell_abstract_gds.py \
+  tech/lef/sky130_scl_9T.lef \
+  tech/lvs/sky130_scl_9T_abstract.gds
 ```
-and view the result in
+
+The abstract GDS provides standard-cell pin geometry for LVS without including the full transistor-level standard-cell internals. The standard cells are blackboxed in the Pegasus LVS deck so that LVS checks top-level standard-cell connectivity.
+
+Then run LVS:
+
+```bash
+make lvs_cdl
+```
+
+The main Pegasus LVS report is:
+
+```text
+build/pegasus/lvs/FFE.lvsrpt.cls
+```

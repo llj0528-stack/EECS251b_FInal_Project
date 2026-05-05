@@ -59,6 +59,29 @@ floorPlan -r 1.0 0.25 30 30 30 30
 saveDesign ./build/innovus/db/${TOP}_floorplan.enc
 
 # ------------------------------------------------------------
+# Power planning: core ring and straps
+# ------------------------------------------------------------
+addRing \
+    -nets {VDD VSS} \
+    -type core_rings \
+    -follow core \
+    -layer {top met5 bottom met5 left met4 right met4} \
+    -width {top 2.0 bottom 2.0 left 2.0 right 2.0} \
+    -spacing {top 2.0 bottom 2.0 left 2.0 right 2.0} \
+    -offset {top 2.0 bottom 2.0 left 2.0 right 2.0}
+
+addStripe \
+    -nets {VDD VSS} \
+    -layer met4 \
+    -direction vertical \
+    -width 1.0 \
+    -spacing 1.0 \
+    -set_to_set_distance 40 \
+    -start_from left \
+    -start_offset 10 \
+    -stop_offset 10
+
+# ------------------------------------------------------------
 # Placement
 # ------------------------------------------------------------
 placeDesign
@@ -67,6 +90,20 @@ saveDesign ./build/innovus/db/${TOP}_place.enc
 
 report_area   > ./build/innovus/reports/${TOP}_postplace_area.rpt
 report_timing > ./build/innovus/reports/${TOP}_postplace_timing.rpt
+
+# ------------------------------------------------------------
+# Power routing: connect stdcell PG pins/rails
+# ------------------------------------------------------------
+globalNetConnect VDD -type pgpin -pin {VDD} -all -override
+globalNetConnect VSS -type pgpin -pin {VSS} -all -override
+
+sroute \
+    -nets {VDD VSS} \
+    -connect {corePin} \
+    -allowJogging true \
+    -allowLayerChange true
+
+saveDesign ./build/innovus/db/${TOP}_sroute.enc
 
 # ------------------------------------------------------------
 # Pre-CTS optimization
@@ -124,9 +161,23 @@ optDesign -postRoute -hold
 saveDesign ./build/innovus/db/${TOP}_postroute_opt.enc
 
 # ------------------------------------------------------------
+# Filler insertion for stdcell rail continuity
+# ------------------------------------------------------------
+addFiller -cell {FILL64 FILL32 FILL16 FILL8 FILL4 FILL2 FILL1} -prefix FILL
+
+saveDesign ./build/innovus/db/${TOP}_fill.enc
+
+# ------------------------------------------------------------
 # Final checks / reports
 # ------------------------------------------------------------
-verify_drc    > ./build/innovus/reports/${TOP}_drc.rpt
+verify_drc > ./build/innovus/reports/${TOP}_drc.rpt
+
+verifyConnectivity -type all -error 1000 -warning 1000 \
+    > ./build/innovus/reports/${TOP}_verify_connectivity_all.rpt
+
+verifyConnectivity -type special -nets {VDD VSS} -error 1000 -warning 1000 \
+    > ./build/innovus/reports/${TOP}_verify_connectivity_pg.rpt
+
 report_timing -max_paths 50 > ./build/innovus/reports/${TOP}_final_timing.rpt
 report_area   > ./build/innovus/reports/${TOP}_final_area.rpt
 report_power  > ./build/innovus/reports/${TOP}_final_power.rpt
@@ -149,15 +200,15 @@ saveDesign ./build/innovus/db/${TOP}_final.enc
 
 # ---- merged GDS (std-cell geometry merged in) ----
 streamOut ./build/innovus/outputs/${TOP}_merged.gds \
-    -mapFile /scratch/eecs251b-aaj/Final_Project/tech/sky130_stream.mapFile \
+    -mapFile ./tech/sky130_stream.mapFile \
     -structureName ${TOP} \
-    -merge { /scratch/eecs251b-aaj/Final_Project/tech/sky130_scl_9T.gds } \
+    -merge { ./tech/sky130_scl_9T.gds } \
     -uniquifyCellNames \
     -mode ALL
 
 # ---- non-merged GDS (no std-cell merge) ----
 streamOut ./build/innovus/outputs/${TOP}_nomerged.gds \
-    -mapFile /scratch/eecs251b-aaj/Final_Project/tech/sky130_stream.mapFile \
+    -mapFile ./tech/sky130_stream.mapFile \
     -structureName ${TOP} \
     -mode ALL
 

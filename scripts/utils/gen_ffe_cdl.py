@@ -15,10 +15,8 @@ Main features:
       \shift_reg2[4] [6]
   by converting them into safe CDL tokens:
       ESC_shift_reg2_4_6
-- Sanitizes bracketed bus names such as:
+- Preserves bracketed bus names such as:
       coeff_bus[57]
-  into:
-      coeff_bus_57_
 """
 
 from __future__ import annotations
@@ -53,7 +51,7 @@ def escape_to_safe_name(token: str) -> str:
     if not token.startswith("\\"):
         return token
 
-    token = token[1:]  # remove leading backslash
+    token = token[1:]
     token = token.replace(" ", "_")
     token = token.replace("[", "_")
     token = token.replace("]", "_")
@@ -86,15 +84,7 @@ def sanitize_escaped_identifiers(text: str) -> str:
 
 
 def sanitize_bracket_name(name: str) -> str:
-    """
-    Convert a normal bracketed net name into a CDL-safe token.
-
-    Example:
-        coeff_bus[57] -> coeff_bus_57_
-    """
-    name = name.strip()
-    name = name.replace("[", "_").replace("]", "_")
-    return name
+    return name.strip()
 
 
 def clean_net_name(net: str) -> str:
@@ -103,17 +93,14 @@ def clean_net_name(net: str) -> str:
     """
     net = net.strip()
 
-    # Map common Verilog constants to simple CDL constants.
     if net in {"1'b0", "1'h0", "1'd0"}:
         return "0"
     if net in {"1'b1", "1'h1", "1'd1"}:
         return "1"
 
-    # Keep already-sanitized escaped names unchanged.
     if net.startswith("ESC_"):
         return net
 
-    # Sanitize bracketed names.
     return sanitize_bracket_name(net)
 
 
@@ -177,6 +164,26 @@ def parse_module_ports(verilog_text: str, top_name: str) -> List[str]:
     port_blob = match.group(1)
     raw_ports = [p.strip() for p in port_blob.replace("\n", " ").split(",")]
     ports = [clean_net_name(p) for p in raw_ports if p]
+    return ports
+
+
+def ffe_top_ports() -> List[str]:
+    ports: List[str] = []
+
+    ports += ["clk", "rst_n", "en"]
+
+    for bus in ["din0", "din1", "din2", "din3"]:
+        ports += [f"{bus}[{i}]" for i in range(10)]
+
+    ports += ["din_valid"]
+
+    ports += [f"coeff_bus[{i}]" for i in range(64)]
+
+    for bus in ["dout0", "dout1", "dout2", "dout3"]:
+        ports += [f"{bus}[{i}]" for i in range(21)]
+
+    ports += ["dout_valid"]
+
     return ports
 
 
@@ -257,39 +264,57 @@ def parse_verilog_instances(
     module_body: str,
     cell_pin_map: Dict[str, List[str]],
 ) -> List[Tuple[str, str, Dict[str, str]]]:
-    """
-    Parse only standard-cell instances whose cell type exists in the CDL library.
-    """
     instances: List[Tuple[str, str, Dict[str, str]]] = []
 
-    # Only accept patterns that look like:
-    #   CELLTYPE INSTNAME ( ... );
-    # and require CELLTYPE to exist in CDL library.
     pattern = re.compile(r"\b(\w+)\s+(\w+)\s*\((.*?)\)\s*;", flags=re.DOTALL)
 
+    total_matches = 0
+    skipped_not_in_cdl = 0
+    skipped_escaped_cell = 0
+    skipped_escaped_inst = 0
+    skipped_no_named_ports = 0
+
+    seen_cell_types = {}
+
     for match in pattern.finditer(module_body):
+        total_matches += 1
+
         cell_type = match.group(1)
         inst_name = match.group(2)
         conn_blob = match.group(3)
 
+        seen_cell_types[cell_type] = seen_cell_types.get(cell_type, 0) + 1
+
         if cell_type not in cell_pin_map:
+            skipped_not_in_cdl += 1
             continue
 
-        # Reject malformed matches.
-        if "\n" in cell_type or "\n" in inst_name:
+        if cell_type.startswith("ESC_"):
+            skipped_escaped_cell += 1
             continue
 
-        # Reject obvious net-like junk in instance or cell positions.
-        if cell_type.startswith("ESC_") or inst_name.startswith("ESC_"):
-            continue
-        if cell_type.startswith("n_") and cell_type not in cell_pin_map:
-            continue
+        if inst_name.startswith("ESC_"):
+            skipped_escaped_inst += 1
 
         conn_dict = parse_named_port_connections(conn_blob)
         if not conn_dict:
+            skipped_no_named_ports += 1
             continue
 
         instances.append((cell_type, inst_name, conn_dict))
+
+    print(f"DEBUG: regex instance-like matches: {total_matches}", file=sys.stderr)
+    print(f"DEBUG: skipped because cell type not in CDL: {skipped_not_in_cdl}", file=sys.stderr)
+    print(f"DEBUG: skipped escaped cell type: {skipped_escaped_cell}", file=sys.stderr)
+    print(f"DEBUG: escaped instance names seen: {skipped_escaped_inst}", file=sys.stderr)
+    print(f"DEBUG: skipped because no named .PIN(net) ports: {skipped_no_named_ports}", file=sys.stderr)
+    print("DEBUG: first 25 seen cell/module types:", file=sys.stderr)
+    for name, count in list(seen_cell_types.items())[:25]:
+        print(f"  {name}: {count}", file=sys.stderr)
+
+    print("DEBUG: first 25 CDL cells:", file=sys.stderr)
+    for name in list(cell_pin_map.keys())[:25]:
+        print(f"  {name}", file=sys.stderr)
 
     return instances
 
@@ -302,16 +327,23 @@ def build_cdl_instance_line(
 ) -> str:
     """
     Build one CDL X-instance line using the CDL library pin order.
-    Unconnected pins default to 0.
+    Unconnected non-supply pins default to 0.
     """
     ordered_nets: List[str] = []
     for pin in pin_order:
-        net = conn_dict.get(pin, "0")
+        if pin in conn_dict:
+            net = conn_dict[pin]
+        elif pin in {"VDD", "VPWR", "VPB", "vdd", "vpwr", "vpb"}:
+            net = "VDD"
+        elif pin in {"VSS", "VGND", "VNB", "gnd", "vss", "vgnd", "vnb"}:
+            net = "VSS"
+        else:
+            net = "0"
+
         ordered_nets.append(clean_net_name(net))
 
     line = f"X{inst_name} " + " ".join(ordered_nets) + f" {cell_type}"
     return line
-
 
 def write_top_cdl(
     out_path: pathlib.Path,
@@ -366,7 +398,7 @@ def main() -> int:
         return 1
 
     try:
-        top_ports = parse_module_ports(verilog_text, top_name)
+        top_ports = ffe_top_ports() if top_name == "FFE" else parse_module_ports(verilog_text, top_name)
         module_body = extract_module_body(verilog_text, top_name)
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
@@ -389,23 +421,19 @@ def main() -> int:
             pin_order=pin_order,
         )
 
-        # Reject malformed lines defensively.
         if not line.startswith("X"):
             bad_lines += 1
             continue
 
         tokens = line.split()
-        # Minimum valid instance: Xname net cell
         if len(tokens) < 3:
             bad_lines += 1
             continue
 
-        # Reject if final token does not look like a real library cell.
         if tokens[-1] not in cell_pin_map:
             bad_lines += 1
             continue
 
-        # Reject if the first net token looks like a broken continuation.
         if len(tokens) > 1 and tokens[1].startswith("_"):
             bad_lines += 1
             continue

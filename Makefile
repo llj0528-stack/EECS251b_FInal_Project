@@ -69,8 +69,8 @@ STDCELL_VERILOG   := $(ROOT)/tech/lvs/sky130_scl_9T.v
 LVS_GDS_FILE      := $(ROOT)/build/innovus/outputs/FFE_merged.gds
 
 # Scheme B: CDL fallback
-# CDL_LIB           := $(ROOT)/tech/sky130_scl_9T.cdl
-CDL_LIB := /home/ff/eecs251b/sky130/sky130A/libs.ref/sky130_fd_sc_hd/cdl/sky130_fd_sc_hd.cdl
+CDL_LIB           := $(ROOT)/tech/sky130_scl_9T.cdl
+# CDL_LIB := /home/ff/eecs251b/sky130/sky130A/libs.ref/sky130_fd_sc_hd/cdl/sky130_fd_sc_hd.cdl
 CDL_GEN_SCRIPT    := $(ROOT)/scripts/utils/gen_ffe_cdl.py
 TOP_CDL_FILE      := $(ROOT)/build/genus/netlist/FFE_top.cdl
 

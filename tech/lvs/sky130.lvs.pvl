@@ -766,8 +766,8 @@ connect nSourceDrain ptap
 connect li1 ptap -by licon1
 connect li1 ntap -by licon1
 connect li1 isolated_tap -by licon1
-sconnect ptap pwell
-sconnect ntap nwell
+connect ptap pwell
+connect ntap nwell
 connect li1 poly -by poly_licon1
 connect poly pfet
 connect poly nfet
@@ -1017,3 +1017,67 @@ lvs_black_box -grey cap_vpp_11p5x11p7_m1m2m3m4_shieldl1m5
 lvs_black_box -grey cap_vpp_11p5x11p7_m1m2m3m4_shieldm5
 
 
+
+// Added for top-level standard-cell LVS
+lvs_black_box ADDFX1
+lvs_black_box ADDHX1
+lvs_black_box AND2X1
+lvs_black_box AND2X2
+lvs_black_box AOI21X1
+lvs_black_box AOI21X2
+lvs_black_box AOI22X1
+lvs_black_box AOI22X2
+lvs_black_box BUFX16
+lvs_black_box BUFX2
+lvs_black_box BUFX4
+lvs_black_box BUFX8
+lvs_black_box CLKAND2X2
+lvs_black_box CLKBUFX2
+lvs_black_box CLKBUFX4
+lvs_black_box CLKBUFX8
+lvs_black_box CLKINVX1
+lvs_black_box CLKINVX2
+lvs_black_box CLKINVX4
+lvs_black_box CLKINVX8
+lvs_black_box CLKMX2X2
+lvs_black_box CLKXOR2X1
+lvs_black_box DFFRX1
+lvs_black_box DFFRX4
+lvs_black_box INVX1
+lvs_black_box INVX16
+lvs_black_box INVX2
+lvs_black_box INVX4
+lvs_black_box INVX8
+lvs_black_box MX2X1
+lvs_black_box NAND2X1
+lvs_black_box NAND2X2
+lvs_black_box NAND2X4
+lvs_black_box NAND3X1
+lvs_black_box NAND3X2
+lvs_black_box NAND3X4
+lvs_black_box NAND4X1
+lvs_black_box NAND4X2
+lvs_black_box NAND4X4
+lvs_black_box NOR2X1
+lvs_black_box NOR2X2
+lvs_black_box NOR2X4
+lvs_black_box NOR3X1
+lvs_black_box OAI211X1
+lvs_black_box OAI211X2
+lvs_black_box OAI21X1
+lvs_black_box OAI21X2
+lvs_black_box OAI221X1
+lvs_black_box OAI221X2
+lvs_black_box OAI222X1
+lvs_black_box OAI222X2
+lvs_black_box OAI22X1
+lvs_black_box OAI22X2
+lvs_black_box OR2X1
+lvs_black_box OR2X2
+lvs_black_box OR3X1
+lvs_black_box XNOR2X1
+lvs_black_box XOR2X2
+lvs_black_box XOR2X4
+
+lvs_black_box AND3X2
+lvs_black_box AOI221X2

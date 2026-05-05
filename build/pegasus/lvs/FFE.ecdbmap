@@ -1,0 +1,46 @@
+Gds_Map 1000
+Layers:
+0 0 41 May  4 19:35:25 2026
+met1_label 1 0
+met2_label 3 0
+met3_label 4 0
+met1_pin 14 0
+poly_licon1 15 0
+HV_FET_gate 19 0
+nfet_01v8_rec 21 0
+hvtpfet 22 0
+pfet_01v8_rec 23 0
+lvtpfet 24 0
+lvtpfet_01v8_rec 25 0
+lvtnfet 26 0
+lvtnfet_01v8_rec 27 0
+hvtpfet_01v8_rec 28 0
+HV_ngate_3v3 29 0
+HV_ngate_5v0 30 0
+via3 31 0
+HV_ngate_5v10v 32 0
+HV_pgate_5v10v 33 0
+met5 34 0
+met4 35 0
+met3 36 0
+met2 37 0
+met1 39 0
+pwell 43 0
+via 44 0
+via2 45 0
+via4 46 0
+res_high_po_0p35_rec 55 0
+res_high_po_0p69_rec 56 0
+res_high_po_1p41_rec 57 0
+res_high_po_2p85_rec 59 0
+res_high_po_5p73_rec 60 0
+res_xhigh_po_0p35_rec 61 0
+res_xhigh_po_0p69_rec 62 0
+res_xhigh_po_1p41_rec 63 0
+res_xhigh_po_2p85_rec 64 0
+res_xhigh_po_5p73_rec 65 0
+capacitor 68 0
+cap_width 72 0
+cap_length 73 0
+END OF RESPONSE
+0 0 0 May  4 19:35:25 2026

@@ -1,0 +1,23 @@
+VERIFY_CONNECTIVITY use new engine.
+
+******** Start: VERIFY CONNECTIVITY ********
+Start Time: Mon May  4 19:14:41 2026
+
+Design Name: FFE
+Database Units: 1000
+Design Boundary: (0.0000, 0.0000) (826.1600, 818.3400)
+Error Limit = 1000; Warning Limit = 1000
+Check specified nets
+Use 8 pthreads
+
+Begin Summary 
+  Found no problems or warnings.
+End Summary
+
+End Time: Mon May  4 19:14:42 2026
+Time Elapsed: 0:00:01.0
+
+******** End: VERIFY CONNECTIVITY ********
+  Verification Complete : 0 Viols.  0 Wrngs.
+  (CPU Time: 0:00:00.1  MEM: 0.000M)
+

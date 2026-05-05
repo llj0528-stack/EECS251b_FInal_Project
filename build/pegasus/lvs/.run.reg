@@ -1,0 +1,31 @@
+# This Pegasus GUI File Index Registry was created automatically
+# Do not attempt to modify this file as any change may lead
+# to Pegasus GUI Tools malfunction.
+# 
+"Layout GDSII" input none /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/innovus/outputs/FFE_nomerged.gds
+"Layout GDSII" input none /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/../../../tech/lvs/sky130_scl_9T_abstract.gds
+"Pegasus Job Mode" internal none lvs
+"Rule File" input text /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/../../../tech/lvs/sky130.lvs.pvl
+"Comparison Report" output cls /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/FFE.lvsrpt.cls
+"Extraction Report" output erc /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/FFE.lvsrpt
+"LVS Report Options" internal none -none
+"Schematic Top Cell" internal none FFE
+"Layout Top Cell" internal none FFE
+"ERC Summary" output text /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/result.sum
+"Extraction Result" internal none CLEAN
+"ERC Result" internal none EMPTY
+"Run Directory" internal none /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/
+"UI Data" internal none ENABLED
+"Pegasus Mode Info" internal none GPGCCGNDAJGCPPKKLBDDJFJAHMFLJKMH
+"Report MaxResults" internal none 100000
+"Pegasus Version" internal none 22.14-s007
+"Binary Name" internal none Pegasus
+"Pegasus Build Date" internal none "Tue Jan 31 16:35:56 PST 2023"
+"Pegasus Job Time" internal none 1777948513
+"Schematic Netlist" input text /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/../../genus/netlist/FFE_top.cdl
+"Comparison Result" internal none MATCH
+"LVS Run Name" internal none FFE.lvsrpt
+"Pegasus Version" internal none 22.14-s007
+"Binary Name" internal none pegasusnvn
+"Pegasus Build Date" internal none "Tue Jan 31 16:35:56 PST 2023"
+"Pegasus Job Time" internal none 1777948531

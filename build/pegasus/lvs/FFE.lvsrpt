@@ -1,0 +1,24 @@
+			*****************************************************
+			**                                                 **
+			**                L V S  R E P O R T               **
+			**                                                 **
+			*****************************************************
+
+
+Report File Name         : FFE.lvsrpt
+ERC Summary File         : /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs/result.sum
+LVS Comparison Report    : FFE.lvsrpt.cls
+Layout Name              : /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/innovus/outputs/FFE_nomerged.gds ("FFE")
+User Name                : eecs251b
+Creation Time            : Mon May  4 19:35:17 2026
+Current directory        : /scratch/eecs251b-abi/project/EECS251b_FInal_Project/build/pegasus/lvs
+Pegasus Version          : 22.14-s007 Tue Jan 31 16:35:56 PST 2023
+
+
+			*****************************************************
+			**                                                 **
+			**            D E V E X T  R E P O R T             **
+			**                                                 **
+			*****************************************************
+
+

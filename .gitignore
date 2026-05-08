@@ -14,7 +14,6 @@
 *.rpt.old
 *.logv
 
-
 # Build
 # build/
 # timingReports/
@@ -34,5 +33,10 @@ innovus_temp_3394531_03f1af53-a580-4a14-a973-9faeae7faae0_eda-4.EECS.Berkeley.ED
 *.map
 *.gz
 
-# temp files
+# temp files or unknown files
 *.cdslck
+*.cmd1
+*.cmd2
+*.cmd3
+*.cmd4
+*.cmd5

@@ -6,15 +6,6 @@ The goal of the design is to compensate channel-induced
 Inter-Symbol Interference (ISI) in twisted-pair copper Ethernet links
 using a programmable FIR-based equalizer architecture.
 
-The project includes:
-- RTL implementation in Verilog
-- Cadence Genus synthesis
-- RTL simulation and waveform validation
-- Python golden model verification
-- Cadence Innovus place-and-route
-- Pegasus DRC/LVS signoff
-- BER/SNR performance modeling
-
 ## Table of Contents
 
 - [1. Project Overview](#1-project-overview)

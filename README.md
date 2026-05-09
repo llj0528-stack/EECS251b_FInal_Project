@@ -15,7 +15,24 @@ The project includes:
 - Pegasus DRC/LVS signoff
 - BER/SNR performance modeling
 
-# 2. Physical Deisgn Flow Usage
+## Table of Contents
+
+- [1. Project Overview](#1-project-overview)
+- [2. Physical Design Flow Usage](#2-physical-design-flow-usage)
+- [3. Architecture](#3-architecture)
+- [4. Repository Structure](#4-repository-structure)
+- [5. Design Specifications](#5-design-specifications)
+- [6. RTL Simulation](#6-rtl-simulation)
+- [7. Golden Model Verification](#7-golden-model-verification)
+- [8. Synthesis Flow](#8-synthesis-flow)
+- [9. Place & Route Flow](#9-place--route-flow)
+- [10. DRC / LVS](#10-drc--lvs)
+- [11. BER / SNR Evaluation](#11-ber--snr-evaluation)
+- [12. Results](#12-results)
+- [13. References](#13-references)
+- [14. Team Members](#14-team-members)
+
+# 2. Physical Design Flow Usage
 ## (1). Run Genus Synthesis
 
 To run synthesis for the `FFE` module from the project root directory:
@@ -39,21 +56,25 @@ To launch the Genus GUI:
 
 ```bash
 source env.sh
-make genus_debug
+make genus_gui
 ```
 
-or equivalently:
+If launching Genus directly from the project root, use:
 
 ```bash
 genus -gui
 ```
 
-inside the GUI command window, run the following tcl script: 
+After launching with `make genus_gui`, run the following Tcl script
+inside the GUI command window:
 
 ```genus
-set_db library [list /home/ff/eecs251b/sky130/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib]
+set ROOT [file normalize "../.."]
 
-read_hdl /scratch/eecs251b-aaj/Final_Project/build/genus/netlist/FFE_synth.v
+set_db init_lib_search_path [list $ROOT/tech/lib]
+set_db library [list sky130_tt_1.8_25_nldm.lib]
+
+read_hdl $ROOT/build/genus/netlist/FFE_synth.v
 
 elaborate FFE
 
@@ -70,7 +91,9 @@ source env.sh
 make sim
 ```
 
-in the ```scratch/eecs251b-aaj/Final_Project``` directory, Which will generate ```/scratch/eecs251b-aaj/Final_Project/build/simulation/ffe.vpd``` waveform file. If you want to view the waveform by using DVE(Synopsys), run
+from the project root directory. This generates the
+`build/simulation/ffe.vpd` waveform file. To view the waveform
+using DVE/Synopsys, run:
 
 ```bash
 make sim_gui
@@ -78,7 +101,7 @@ make sim_gui
 
 and add signals to waveform viewer. 
 
-## (4). Verify Gloden Model
+## (4). Verify Golden Model
 Run 
 
 ```bash
@@ -92,7 +115,7 @@ Run
 make innovus
 ```
 
-# (6). Open different layout result in PAR process
+## (6). Open different layout result in PAR process
 e.g. Open the final result: Open Innovus first
 
 ```bash
@@ -297,13 +320,16 @@ scripts/innovus/innovus.tcl
 constraints/ffe.sdc
     Timing constraints
 
-build/innovus/outputs/FFE.gds
-    Final GDSII layout
+build/innovus/outputs/FFE_merged.gds
+    Final merged GDSII layout
+
+build/innovus/outputs/FFE_nomerged.gds
+    Hierarchy-preserved GDSII layout used for LVS experiments
 
 build/genus/netlist/FFE_synth.v
     Synthesized gate-level netlist
 
-build/genus/netlist/FFE_par.v
+build/innovus/outputs/FFE_par.v
     Netlist after PAR
 ```
 
@@ -811,7 +837,52 @@ build/pegasus/lvs/FFE.lvsrpt.cls
 The final LVS result reports a matched `FFE` top cell.
 
 # 11. BER / SNR Evaluation
-# 12. Results
+
+A standalone BER/SNR proxy model was used to evaluate how well
+the fixed-point 8-tap FFE recovers a 1000BASE-T-like dispersive
+channel. This is not a full IEEE 802.3 PHY conformance test;
+it isolates the FFE datapath and estimates slicer-input error
+behavior using a conservative proxy.
+
+The sweep in `reference_model/ffe/ber_snr_sweep.py` generates
+500,000 random four-lane PAM-5 symbol vectors per SNR point,
+applies a Clause 40 insertion-loss-shaped minimum-phase channel,
+injects AWGN, and compares several receiver cases:
+- ideal AWGN channel
+- Clause 40-like channel without FFE
+- Clause 40-like channel with floating-point MMSE FFE
+- Clause 40-like channel with fixed RTL-model FFE
+
+The floating reference is an 8-tap MMSE equalizer designed at
+24 dB SNR. Its coefficients are quantized to signed 8-bit values
+and packed into the same coefficient bus used by the Python
+`FFEGoldenModel`, so the fixed-point sweep exercises the same
+coefficient packing, signed arithmetic, input quantization, and
+valid-pipeline behavior as the RTL checker.
+
+Archived outputs are stored under:
+
+```text
+reference_model/ffe/results/
+```
+
+Important artifacts include:
+
+| File | Description |
+|---|---|
+| `ber_snr_sweep.csv` | Raw BER/SNR sweep data |
+| `ber_snr_summary.txt` | Required-SNR summary and model settings |
+| `ber_snr_sweep.png` | BER and 125-octet FER proxy plot |
+
+The fixed RTL-model FFE reaches the `1e-10` BER proxy target at
+about `26.29 dB` input SNR, while the floating MMSE reference
+reaches it at about `26.23 dB`. The roughly `0.06 dB` gap indicates
+that the chosen 8-tap, 8-bit-coefficient implementation preserves
+most of the MMSE equalization benefit after fixed-point quantization.
+The unequalized Clause 40-like channel does not reach the BER target
+in the sweep, confirming that the FFE is necessary to remove residual
+ISI.
+
 # 12. Results
 
 The final implementation successfully completes the
@@ -838,11 +909,9 @@ The archived regression reports zero mismatches.
 
 ## BER / SNR Results
 
-A Clause 40-like BER/SNR proxy model was implemented
-using a dispersive Ethernet channel with injected AWGN.
-
-The fixed-point RTL-model FFE closely tracks the
-floating-point MMSE equalizer reference.
+The BER/SNR proxy described in Section 11 shows that the
+fixed-point RTL-model FFE closely tracks the floating-point
+MMSE equalizer reference.
 
 | Case | Input SNR at BER Target |
 |---|---|
@@ -947,5 +1016,5 @@ Final Innovus place-and-route layout of the
 9. Cadence Pegasus Verification System User Guide
 
 # 14. Team Members
-- Andrew Colleta
+- Andrew Colletta
 - Lijin Liu

@@ -1,0 +1,23 @@
+BER/SNR performance proxy for standalone 1000BASE-T FFE
+Scope: not a full IEEE 802.3 PHY conformance test
+Seed: 251
+Symbols per SNR: 500000
+SNR sweep dB: [8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 32.0, 34.0, 36.0, 38.0, 40.0]
+BER target: 1.000e-10
+125-octet FER proxy target: 1.000e-07
+Channel impulse: [0.6431849611725339, 0.22089246413607183, 0.06768017299656842, 0.03925409778354515, 0.016645760249912295, 0.008693463542990313, 0.0029487311912693606, 0.0007003489271087094, 0.0]
+Floating MMSE coefficients: [-7.293171091150635e-05, 0.00047172885460490326, -0.00047920568318146975, 0.005236772997895741, 1.5364259677895729, -0.52296706608428, 0.017172398907762884, -0.0428494469501862]
+Fixed FFE coefficients: [0, 0, 0, 0, 126, -43, 1, -4]
+Fixed coefficient scale: 82
+MMSE selected delay symbols: 4
+MMSE training MSE: 1.050495503192e-02
+
+Required SNR estimates:
+clause40_fixed_ffe BER target: {'status': 'interpolated', 'requested_input_snr_db': 26.28618788133148, 'measured_output_snr_db': 25.13896898382278}
+clause40_fixed_ffe FER target: {'status': 'interpolated', 'requested_input_snr_db': 26.28635599826801, 'measured_output_snr_db': 25.139132254695518}
+clause40_float_mmse BER target: {'status': 'interpolated', 'requested_input_snr_db': 26.22707262777076, 'measured_output_snr_db': 25.147073535694105}
+clause40_float_mmse FER target: {'status': 'interpolated', 'requested_input_snr_db': 26.226858029754897, 'measured_output_snr_db': 25.14686150761881}
+clause40_no_ffe BER target: {'status': 'not_reached', 'requested_input_snr_db': None, 'measured_output_snr_db': None}
+clause40_no_ffe FER target: {'status': 'not_reached', 'requested_input_snr_db': None, 'measured_output_snr_db': None}
+ideal_no_ffe BER target: {'status': 'interpolated', 'requested_input_snr_db': 25.08418892868768, 'measured_output_snr_db': 25.08708030472989}
+ideal_no_ffe FER target: {'status': 'interpolated', 'requested_input_snr_db': 25.084185176609246, 'measured_output_snr_db': 25.0870765482852}
